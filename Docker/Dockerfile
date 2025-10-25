@@ -47,7 +47,7 @@ RUN apk add --no-cache curl binutils
 WORKDIR $FUSEKI_DIR
 
 ## -- Download the jar file.
-COPY download.sh .
+COPY Docker/download.sh .
 RUN chmod a+x download.sh
 
 # Download, with check of the SHA1 checksum.
@@ -69,8 +69,8 @@ RUN \
         --output "${JAVA_MINIMAL}" \
         --add-modules "${JDEPS},${JDEPS_EXTRA}"
 
-ADD entrypoint.sh .
-ADD log4j2.properties .
+ADD Docker/entrypoint.sh .
+ADD Docker/log4j2.properties .
 
 ## ---- Stage: Build runtime
 FROM alpine:${ALPINE_VERSION}
