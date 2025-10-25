@@ -69,6 +69,8 @@ RUN \
         --output "${JAVA_MINIMAL}" \
         --add-modules "${JDEPS},${JDEPS_EXTRA}"
 
+RUN unzip ${FUSEKI_JAR} 'webapp/*'        
+
 ADD Docker/entrypoint.sh .
 ADD Docker/log4j2.properties .
 
