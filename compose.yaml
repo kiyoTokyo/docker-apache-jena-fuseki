@@ -26,6 +26,6 @@ services:
     ports:
       - "3030:3030"
     volumes:
-      - ./logs:/fuseki/logs
-      - ./databases:/fuseki/databases
+      - ./docker-data/logs:/fuseki/logs
+      - ./docker-data/databases:/fuseki/databases
 #volumes:
