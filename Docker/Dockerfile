@@ -25,7 +25,7 @@ ARG JENA_VERSION="5.6.0"
 # Internal, passed between stages.
 ARG FUSEKI_DIR=/fuseki
 ARG FUSEKI_ZIP=apache-jena-fuseki-${JENA_VERSION}.zip
-ARG FUSEKI_JAR=jena-fuseki-server-${JENA_VERSION}.jar
+ARG FUSEKI_JAR=fuseki-server.jar
 ARG JAVA_MINIMAL=/opt/java-minimal
 
 ## ---- Stage: Download and build java.
@@ -37,7 +37,6 @@ ARG FUSEKI_DIR
 ARG FUSEKI_JAR
 ARG FUSEKI_ZIP
 ARG REPO=https://repo1.maven.org/maven2
-ARG JAR_URL=${REPO}/org/apache/jena/jena-fuseki-server/${JENA_VERSION}/${FUSEKI_JAR}
 ARG ZIP_URL=${REPO}/org/apache/jena/apache-jena-fuseki/${JENA_VERSION}/${FUSEKI_ZIP}
 
 RUN [ "${JENA_VERSION}" != "" ] || { echo -e '\n**** Set JENA_VERSION ****\n' ; exit 1 ; }
@@ -66,7 +65,6 @@ RUN unzip ${FUSEKI_ZIP}
 ## ADD "$JAR_URL"
 
 ## -- Make reduced Java JDK
-
 ARG JDEPS_EXTRA="jdk.crypto.cryptoki,jdk.crypto.ec"
 RUN \
   JDEPS="$(jdeps --multi-release base --print-module-deps --ignore-missing-deps ${FUSEKI_JAR})"  && \
@@ -74,8 +72,6 @@ RUN \
         --compress 2 --strip-debug --no-header-files --no-man-pages \
         --output "${JAVA_MINIMAL}" \
         --add-modules "${JDEPS},${JDEPS_EXTRA}"
-
-
 
 ADD Docker/entrypoint.sh .
 ADD Docker/log4j2.properties .
