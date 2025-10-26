@@ -56,7 +56,7 @@ RUN chmod a+x download.sh
 # RUN ./download.sh --chksum sha1 "$JAR_URL"
 RUN ./download.sh --chksum sha1 "$ZIP_URL"
 
-RUN unzip ${FUSEKI_ZIP}
+RUN unzip -j ${FUSEKI_ZIP}
 
 ## -- Alternatives to download : copy already downloaded.
 ## COPY ${FUSEKI_JAR} .
