@@ -35,9 +35,9 @@ FROM eclipse-temurin:${JAVA_VERSION}-alpine AS base
 
 ARG JAVA_MINIMAL
 ARG JENA_VERSION
-ARG FUSEKI_DIR
 ARG FUSEKI_JAR
 ARG FUSEKI_ZIP
+ARG FUSEKI_DIR
 ARG FUSEKI_INST_DIR
 ARG REPO=https://repo1.maven.org/maven2
 ARG ZIP_URL=${REPO}/org/apache/jena/apache-jena-fuseki/${JENA_VERSION}/${FUSEKI_ZIP}
@@ -90,9 +90,11 @@ ARG JENA_VERSION
 ARG JAVA_MINIMAL
 ARG FUSEKI_DIR
 ARG FUSEKI_JAR
+ARG FUSEKI_DIR
+ARG FUSEKI_INST_DIR
 
-ENV FUSEKI_BASE
-ENV FUSEKI_HOME
+ENV FUSEKI_BASE=${FUSEKI_DIR}
+ENV FUSEKI_HOME=${FUSEKI_INST_DIR}
 
 COPY --from=base /opt/java-minimal /opt/java-minimal
 COPY --from=base /apache-jena-fuseki /apache-jena-fuseki
