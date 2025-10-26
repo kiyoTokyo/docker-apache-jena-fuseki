@@ -87,6 +87,8 @@ RUN \
 ## ---- Stage: Build runtime
 FROM alpine:${ALPINE_VERSION}
 
+RUN apk add --no-cache bash curl ca-certificates findutils coreutils gettext pwgen procps tini
+
 ## Import ARGs
 ARG JENA_VERSION
 ARG JAVA_MINIMAL
