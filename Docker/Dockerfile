@@ -24,7 +24,7 @@ ARG JENA_VERSION="5.6.0"
 
 # Internal, passed between stages.
 ARG FUSEKI_DIR=/fuseki
-ARG FUSEKI_ZIP=jena-fuseki-server-${JENA_VERSION}.zip
+ARG FUSEKI_ZIP=apache-jena-fuseki-${JENA_VERSION}.zip
 ARG FUSEKI_JAR=jena-fuseki-server-${JENA_VERSION}.jar
 ARG JAVA_MINIMAL=/opt/java-minimal
 
