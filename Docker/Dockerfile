@@ -135,5 +135,5 @@ ENV \
 
 EXPOSE 3030
 
-ENTRYPOINT ["${FUSEKI_HOME}/entrypoint.sh" ]
+ENTRYPOINT ["/apache-jena-fuseki/entrypoint.sh" ]
 CMD []
