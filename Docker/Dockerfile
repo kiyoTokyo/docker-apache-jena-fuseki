@@ -79,7 +79,6 @@ RUN \
         --output "${JAVA_MINIMAL}" \
         --add-modules "${JDEPS},${JDEPS_EXTRA}"
 
-ADD Docker/entrypoint.sh /entrypoint.sh
 ADD Docker/log4j2.properties ${FUSEKI_HOME}/log4j2.properties
 
 ## ---- Stage: Build runtime
@@ -98,6 +97,8 @@ ENV FUSEKI_HOME=${FUSEKI_INST_DIR}
 
 COPY --from=base /opt/java-minimal /opt/java-minimal
 COPY --from=base /apache-jena-fuseki /apache-jena-fuseki
+
+ADD Docker/entrypoint.sh /entrypoint.sh
 
 WORKDIR $FUSEKI_DIR
 
