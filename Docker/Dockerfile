@@ -24,6 +24,10 @@ ARG JENA_VERSION="5.6.0"
 
 # Internal, passed between stages.
 ARG FUSEKI_DIR=/fuseki
+ARG FUSEKI_INST_DIR=/apache-jena-fuseki
+ENV FUSEKI_BASE=${FUSEKI_DIR}
+ENV FUSEKI_HOME=${FUSEKI_INST_DIR}
+
 ARG FUSEKI_ZIP=apache-jena-fuseki-${JENA_VERSION}.zip
 ARG FUSEKI_JAR=fuseki-server.jar
 ARG JAVA_MINIMAL=/opt/java-minimal
@@ -46,17 +50,18 @@ RUN echo && echo "==== Docker build for Apache Jena Fuseki ${JENA_VERSION} ===="
 RUN apk add --no-cache curl binutils
 
 ## -- Fuseki installed and runs in /fuseki.
-WORKDIR $FUSEKI_DIR
+WORKDIR /tmp
 
 ## -- Download the jar file.
-COPY Docker/download.sh .
-RUN chmod a+x download.sh
+COPY Docker/download.sh ${FUSEKI_HOME}/download.sh
+RUN chmod a+x ${FUSEKI_HOME}/download.sh
 
 # Download, with check of the SHA1 checksum.
 # RUN ./download.sh --chksum sha1 "$JAR_URL"
-RUN ./download.sh --chksum sha1 "$ZIP_URL"
-
-RUN unzip -j ${FUSEKI_ZIP}
+RUN ${FUSEKI_HOME}/download.sh --chksum sha1 "$ZIP_URL" && \
+    unzip ${FUSEKI_ZIP} && \
+    mv apache-jena-fuseki-${JENA_VERSION} ${FUSEKI_HOME} && \
+    rm ${FUSEKI_ZIP}
 
 ## -- Alternatives to download : copy already downloaded.
 ## COPY ${FUSEKI_JAR} .
@@ -67,14 +72,14 @@ RUN unzip -j ${FUSEKI_ZIP}
 ## -- Make reduced Java JDK
 ARG JDEPS_EXTRA="jdk.crypto.cryptoki,jdk.crypto.ec"
 RUN \
-  JDEPS="$(jdeps --multi-release base --print-module-deps --ignore-missing-deps ${FUSEKI_JAR})"  && \
+  JDEPS="$(jdeps --multi-release base --print-module-deps --ignore-missing-deps ${FUSEKI_HOME}/${FUSEKI_JAR})"  && \
   jlink \
         --compress 2 --strip-debug --no-header-files --no-man-pages \
         --output "${JAVA_MINIMAL}" \
         --add-modules "${JDEPS},${JDEPS_EXTRA}"
 
-ADD Docker/entrypoint.sh .
-ADD Docker/log4j2.properties .
+ADD Docker/entrypoint.sh /entrypoint.sh
+ADD Docker/log4j2.properties ${FUSEKI_HOME}/log4j2.properties
 
 ## ---- Stage: Build runtime
 FROM alpine:${ALPINE_VERSION}
@@ -86,7 +91,7 @@ ARG FUSEKI_DIR
 ARG FUSEKI_JAR
 
 COPY --from=base /opt/java-minimal /opt/java-minimal
-COPY --from=base /fuseki /fuseki
+COPY --from=base /apache-jena-fuseki /apache-jena-fuseki
 
 WORKDIR $FUSEKI_DIR
 
@@ -112,7 +117,7 @@ USER $JENA_USER
 RUN \
     mkdir -p $LOGS && \
     mkdir -p $DATA && \
-    chmod a+x entrypoint.sh
+    chmod a+x /entrypoint.sh
 
 ## Default environment variables.
 ENV \
@@ -124,5 +129,5 @@ ENV \
 
 EXPOSE 3030
 
-ENTRYPOINT ["./entrypoint.sh" ]
+ENTRYPOINT ["/entrypoint.sh" ]
 CMD []
