@@ -25,8 +25,6 @@ ARG JENA_VERSION="5.6.0"
 # Internal, passed between stages.
 ARG FUSEKI_DIR=/fuseki
 ARG FUSEKI_INST_DIR=/apache-jena-fuseki
-ENV FUSEKI_BASE=${FUSEKI_DIR}
-ENV FUSEKI_HOME=${FUSEKI_INST_DIR}
 
 ARG FUSEKI_ZIP=apache-jena-fuseki-${JENA_VERSION}.zip
 ARG FUSEKI_JAR=fuseki-server.jar
@@ -42,6 +40,8 @@ ARG FUSEKI_JAR
 ARG FUSEKI_ZIP
 ARG REPO=https://repo1.maven.org/maven2
 ARG ZIP_URL=${REPO}/org/apache/jena/apache-jena-fuseki/${JENA_VERSION}/${FUSEKI_ZIP}
+ENV FUSEKI_BASE=${FUSEKI_DIR}
+ENV FUSEKI_HOME=${FUSEKI_INST_DIR}
 
 RUN [ "${JENA_VERSION}" != "" ] || { echo -e '\n**** Set JENA_VERSION ****\n' ; exit 1 ; }
 RUN echo && echo "==== Docker build for Apache Jena Fuseki ${JENA_VERSION} ====" && echo
