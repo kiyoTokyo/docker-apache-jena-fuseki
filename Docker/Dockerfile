@@ -60,7 +60,7 @@ RUN chmod a+x ${FUSEKI_HOME}/download.sh
 # RUN ./download.sh --chksum sha1 "$JAR_URL"
 RUN ${FUSEKI_HOME}/download.sh --chksum sha1 "$ZIP_URL" && \
     unzip ${FUSEKI_ZIP} && \
-    mv apache-jena-fuseki-${JENA_VERSION} ${FUSEKI_HOME} && \
+    mv apache-jena-fuseki-${JENA_VERSION}* ${FUSEKI_HOME} && \
     rm ${FUSEKI_ZIP}
 
 ## -- Alternatives to download : copy already downloaded.
