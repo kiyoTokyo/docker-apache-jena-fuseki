@@ -80,6 +80,7 @@ RUN \
         --add-modules "${JDEPS},${JDEPS_EXTRA}"
 
 ADD Docker/log4j2.properties ${FUSEKI_HOME}/log4j2.properties
+ADD Docker/entrypoint.sh ${FUSEKI_HOME}/entrypoint.sh
 
 ## ---- Stage: Build runtime
 FROM alpine:${ALPINE_VERSION}
@@ -97,8 +98,6 @@ ENV FUSEKI_HOME=${FUSEKI_INST_DIR}
 
 COPY --from=base /opt/java-minimal /opt/java-minimal
 COPY --from=base /apache-jena-fuseki /apache-jena-fuseki
-
-ADD Docker/entrypoint.sh /entrypoint.sh
 
 WORKDIR $FUSEKI_DIR
 
@@ -124,7 +123,7 @@ USER $JENA_USER
 RUN \
     mkdir -p $LOGS && \
     mkdir -p $DATA && \
-    chmod a+x /entrypoint.sh
+    chmod a+x ${FUSEKI_HOME}/entrypoint.sh
 
 ## Default environment variables.
 ENV \
@@ -136,5 +135,5 @@ ENV \
 
 EXPOSE 3030
 
-ENTRYPOINT ["/entrypoint.sh" ]
+ENTRYPOINT ["${FUSEKI_HOME}/entrypoint.sh" ]
 CMD []
