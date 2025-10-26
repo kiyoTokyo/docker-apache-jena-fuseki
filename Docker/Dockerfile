@@ -24,6 +24,7 @@ ARG JENA_VERSION="5.6.0"
 
 # Internal, passed between stages.
 ARG FUSEKI_DIR=/fuseki
+ARG FUSEKI_ZIP=jena-fuseki-server-${JENA_VERSION}.zip
 ARG FUSEKI_JAR=jena-fuseki-server-${JENA_VERSION}.jar
 ARG JAVA_MINIMAL=/opt/java-minimal
 
@@ -36,6 +37,7 @@ ARG FUSEKI_DIR
 ARG FUSEKI_JAR
 ARG REPO=https://repo1.maven.org/maven2
 ARG JAR_URL=${REPO}/org/apache/jena/jena-fuseki-server/${JENA_VERSION}/${FUSEKI_JAR}
+ARG ZIP_URL=${REPO}/org/apache/jena/jena-fuseki-server/${JENA_VERSION}/${FUSEKI_ZIP}
 
 RUN [ "${JENA_VERSION}" != "" ] || { echo -e '\n**** Set JENA_VERSION ****\n' ; exit 1 ; }
 RUN echo && echo "==== Docker build for Apache Jena Fuseki ${JENA_VERSION} ====" && echo
@@ -51,7 +53,10 @@ COPY Docker/download.sh .
 RUN chmod a+x download.sh
 
 # Download, with check of the SHA1 checksum.
-RUN ./download.sh --chksum sha1 "$JAR_URL"
+# RUN ./download.sh --chksum sha1 "$JAR_URL"
+RUN ./download.sh --chksum sha1 "$ZIP_URL"
+
+RUN unzip ${FUSEKI_ZIP}
 
 ## -- Alternatives to download : copy already downloaded.
 ## COPY ${FUSEKI_JAR} .
@@ -69,7 +74,7 @@ RUN \
         --output "${JAVA_MINIMAL}" \
         --add-modules "${JDEPS},${JDEPS_EXTRA}"
 
-RUN unzip ${FUSEKI_JAR} 'webapp/*'        
+
 
 ADD Docker/entrypoint.sh .
 ADD Docker/log4j2.properties .
