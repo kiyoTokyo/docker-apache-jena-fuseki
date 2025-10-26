@@ -26,4 +26,4 @@ services:
     volumes:
       - ./docker-data/logs:/fuseki/logs
       - ./docker-data/databases:/fuseki/databases
-    command: [ "--tdb2", "--update", "--loc", "/fuseki/databases", "/ds" ]
+#    command: [ "--tdb2", "--update", "--loc", "/fuseki/databases", "/ds" ]
