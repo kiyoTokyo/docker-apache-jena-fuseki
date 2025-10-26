@@ -38,7 +38,7 @@ ARG FUSEKI_JAR
 ARG FUSEKI_ZIP
 ARG REPO=https://repo1.maven.org/maven2
 ARG JAR_URL=${REPO}/org/apache/jena/jena-fuseki-server/${JENA_VERSION}/${FUSEKI_JAR}
-ARG ZIP_URL=${REPO}/org/apache/apache-jena-fuseki/${JENA_VERSION}/${FUSEKI_ZIP}
+ARG ZIP_URL=${REPO}/org/apache/jena/apache-jena-fuseki/${JENA_VERSION}/${FUSEKI_ZIP}
 
 RUN [ "${JENA_VERSION}" != "" ] || { echo -e '\n**** Set JENA_VERSION ****\n' ; exit 1 ; }
 RUN echo && echo "==== Docker build for Apache Jena Fuseki ${JENA_VERSION} ====" && echo
