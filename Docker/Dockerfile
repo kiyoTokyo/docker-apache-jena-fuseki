@@ -59,6 +59,7 @@ RUN chmod a+x ${FUSEKI_HOME}/download.sh
 COPY Docker/log4j2.properties ${FUSEKI_HOME}/log4j2.properties
 COPY Docker/entrypoint.sh ${FUSEKI_HOME}/entrypoint.sh
 RUN chmod a+x ${FUSEKI_HOME}/entrypoint.sh
+COPY Docker/shiro.ini ${FUSEKI_HOME}/shiro.ini
 
 # Download, with check of the SHA1 checksum.
 # RUN ./download.sh --chksum sha1 "$JAR_URL"
