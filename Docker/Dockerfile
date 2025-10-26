@@ -38,6 +38,7 @@ ARG JENA_VERSION
 ARG FUSEKI_DIR
 ARG FUSEKI_JAR
 ARG FUSEKI_ZIP
+ARG FUSEKI_INST_DIR
 ARG REPO=https://repo1.maven.org/maven2
 ARG ZIP_URL=${REPO}/org/apache/jena/apache-jena-fuseki/${JENA_VERSION}/${FUSEKI_ZIP}
 ENV FUSEKI_BASE=${FUSEKI_DIR}
@@ -89,6 +90,9 @@ ARG JENA_VERSION
 ARG JAVA_MINIMAL
 ARG FUSEKI_DIR
 ARG FUSEKI_JAR
+
+ENV FUSEKI_BASE
+ENV FUSEKI_HOME
 
 COPY --from=base /opt/java-minimal /opt/java-minimal
 COPY --from=base /apache-jena-fuseki /apache-jena-fuseki
