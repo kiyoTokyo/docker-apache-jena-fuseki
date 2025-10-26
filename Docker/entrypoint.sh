@@ -3,4 +3,4 @@
 
 ## env | sort
 #exec "$JAVA_HOME/bin/java" $JAVA_OPTIONS -jar "${FUSEKI_DIR}/${FUSEKI_JAR}" "$@"
-exec "./fuseki-server" "$@"
+exec "/apache-jena-fuseki/fuseki-server" "$@"
