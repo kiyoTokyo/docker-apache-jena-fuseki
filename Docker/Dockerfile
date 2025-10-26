@@ -56,6 +56,9 @@ WORKDIR /tmp
 ## -- Download the jar file.
 COPY Docker/download.sh ${FUSEKI_HOME}/download.sh
 RUN chmod a+x ${FUSEKI_HOME}/download.sh
+COPY Docker/log4j2.properties ${FUSEKI_HOME}/log4j2.properties
+COPY Docker/entrypoint.sh ${FUSEKI_HOME}/entrypoint.sh
+RUN chmod a+x ${FUSEKI_HOME}/entrypoint.sh
 
 # Download, with check of the SHA1 checksum.
 # RUN ./download.sh --chksum sha1 "$JAR_URL"
@@ -79,8 +82,6 @@ RUN \
         --output "${JAVA_MINIMAL}" \
         --add-modules "${JDEPS},${JDEPS_EXTRA}"
 
-ADD Docker/log4j2.properties ${FUSEKI_HOME}/log4j2.properties
-ADD Docker/entrypoint.sh ${FUSEKI_HOME}/entrypoint.sh
 
 ## ---- Stage: Build runtime
 FROM alpine:${ALPINE_VERSION}
@@ -122,8 +123,7 @@ USER $JENA_USER
 
 RUN \
     mkdir -p $LOGS && \
-    mkdir -p $DATA && \
-    chmod a+x ${FUSEKI_HOME}/entrypoint.sh
+    mkdir -p $DATA
 
 ## Default environment variables.
 ENV \
